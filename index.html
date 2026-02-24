@@ -18,6 +18,7 @@
     --white: #FFFFFF;
     --shadow: 0 8px 24px rgba(245, 100, 169, 0.15);
     --shadow-sm: 0 4px 12px rgba(245, 100, 169, 0.1);
+    /* keep old vars mapped */
     --blush: #FFC1E3;
     --blush-light: #FFD6EC;
     --pale: #FFF0F7;
@@ -39,110 +40,377 @@
     overflow-x: hidden;
   }
 
-  /* Login Button Styling */
-  .login-overlay {
-    position: fixed; inset: 0; background: var(--light-bg);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    z-index: 2000;
+  body::before {
+    content: '';
+    position: fixed;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(245,100,169,0.10) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
   }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -80px; left: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(205,180,255,0.22) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* LOGIN */
+  .login-overlay {
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, var(--light-bg) 0%, var(--very-light-bg) 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 2000; gap: 24px;
+  }
+  .login-overlay.hidden { display: none; }
+  .login-logo { font-family: 'Playfair Display', serif; font-size: 40px; color: var(--text); }
+  .login-logo span { font-style: italic; color: var(--primary); }
+  .login-sub { font-size: 14px; color: var(--text-soft); }
   .btn-login {
     background: linear-gradient(135deg, var(--primary), var(--accent));
     color: white; border: none; border-radius: 14px;
-    padding: 16px 32px; font-size: 18px; font-weight: 600;
+    padding: 16px 32px; font-size: 16px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
     cursor: pointer; box-shadow: var(--shadow-lg);
-    display: flex; align-items: center; gap: 10px;
+    display: flex; align-items: center; gap: 10px; transition: opacity 0.2s;
   }
+  .btn-login:hover { opacity: 0.9; }
 
   /* HEADER */
   .header {
     background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-    padding: 24px 20px 32px; position: relative;
+    padding: 24px 20px 32px;
+    position: relative; overflow: hidden;
   }
-  .header-inner { max-width: 480px; margin: 0 auto; position: relative; z-index: 1; }
-  .app-title { font-family: 'Playfair Display', serif; font-size: 32px; color: white; }
+  .header-inner {
+    max-width: 480px; margin: 0 auto;
+    position: relative; z-index: 1;
+    display: flex; align-items: flex-start; justify-content: space-between;
+  }
+  .app-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px; color: white; letter-spacing: -0.5px;
+  }
   .app-title span { font-style: italic; opacity: 0.85; }
-  .app-subtitle { color: rgba(255,255,255,0.8); font-size: 13px; margin-top: 2px; }
+  .app-subtitle {
+    color: rgba(255,255,255,0.8); font-size: 13px;
+    margin-top: 2px; font-weight: 300; letter-spacing: 0.5px;
+  }
+  .btn-logout {
+    background: rgba(255,255,255,0.2); border: none; color: white;
+    border-radius: 10px; padding: 8px 14px; cursor: pointer;
+    font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500;
+    transition: background 0.2s; white-space: nowrap; margin-top: 4px;
+  }
+  .btn-logout:hover { background: rgba(255,255,255,0.3); }
 
   /* STATS */
-  .stats-card { max-width: 480px; margin: -18px auto 0; padding: 0 16px; position: relative; z-index: 10; }
+  .stats-card {
+    max-width: 480px; margin: -18px auto 0;
+    padding: 0 16px; position: relative; z-index: 10;
+  }
   .stats-inner {
-    background: white; border-radius: var(--radius); padding: 16px 20px;
-    box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px;
+    background: white; border-radius: var(--radius);
+    padding: 16px 20px; box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; gap: 12px;
   }
   .stats-icon {
-    width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent), var(--primary));
-    border-radius: 14px; display: flex; align-items: center; justify-content: center;
-    font-size: 20px; color: white; flex-shrink: 0;
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, var(--accent), var(--primary));
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700; color: white; flex-shrink: 0;
   }
-  .stats-value { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--primary); line-height: 1; }
+  .stats-label {
+    font-size: 12px; color: var(--text-soft);
+    font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .stats-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; color: var(--primary); line-height: 1;
+  }
+  .stats-sub { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
 
   /* CALENDAR */
-  .calendar-wrap { max-width: 480px; margin: 20px auto 0; padding: 0 16px; }
-  .calendar-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-  .cal-nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px 14px; border-bottom: 1px solid var(--blush-light); }
-  .cal-month { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text); }
-  .cal-nav-btn { width: 36px; height: 36px; border: none; background: var(--pale); color: var(--primary); border-radius: 10px; cursor: pointer; }
-  .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); padding: 8px 12px 4px; }
-  .cal-weekday { text-align: center; font-size: 11px; font-weight: 600; color: var(--text-soft); text-transform: uppercase; }
-  .cal-days { display: grid; grid-template-columns: repeat(7, 1fr); padding: 4px 12px 16px; gap: 2px; }
-  .cal-day {
-    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
-    border-radius: 50%; cursor: pointer; font-size: 15px; position: relative; transition: 0.2s; color: var(--text);
+  .calendar-wrap {
+    max-width: 480px; margin: 20px auto 0;
+    padding: 0 16px; position: relative; z-index: 5;
   }
-  .cal-day.today { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; box-shadow: 0 3px 12px rgba(245,100,169,0.4); }
-  .cal-day.completed { background: linear-gradient(135deg, var(--secondary) 0%, #B896E8 100%); color: white; }
-  .cal-day.completed::after { content: '✓'; position: absolute; bottom: -3px; right: -3px; width: 18px; height: 18px; background: var(--accent); border-radius: 50%; font-size: 11px; color: white; line-height: 18px; text-align: center; }
-  .cal-day.has-workout:not(.completed)::after { content: '•'; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); font-size: 14px; color: var(--primary); }
+  .calendar-card {
+    background: white; border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden;
+  }
+  .cal-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px 14px; border-bottom: 1px solid var(--blush-light);
+  }
+  .cal-month { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text); }
+  .cal-nav-btn {
+    width: 36px; height: 36px; border: none;
+    background: var(--pale); color: var(--primary);
+    border-radius: 10px; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .cal-nav-btn:hover { background: var(--primary); color: white; }
+  .cal-weekdays {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    padding: 8px 12px 4px;
+  }
+  .cal-weekday {
+    text-align: center; font-size: 11px; font-weight: 600;
+    color: var(--text-soft); letter-spacing: 0.5px;
+    text-transform: uppercase; padding: 4px 0;
+  }
+  .cal-days {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    padding: 4px 12px 16px; gap: 2px;
+  }
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; cursor: pointer;
+    font-size: 15px; font-weight: 500;
+    position: relative; transition: all 0.2s; color: var(--text);
+  }
+  .cal-day:hover:not(.empty) { background: var(--blush-light); color: var(--primary); }
+  .cal-day.empty { cursor: default; }
+  .cal-day.today {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white; font-weight: 600;
+    box-shadow: 0 3px 12px rgba(245,100,169,0.4);
+  }
+  .cal-day.completed {
+    background: linear-gradient(135deg, var(--secondary) 0%, #B896E8 100%);
+    color: white;
+  }
+  .cal-day.completed::after {
+    content: '✓';
+    position: absolute;
+    bottom: -3px; right: -3px;
+    width: 18px; height: 18px;
+    background: var(--accent);
+    border-radius: 50%;
+    font-size: 11px; font-weight: 900;
+    color: white;
+    line-height: 18px;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  }
+  .cal-day.has-workout:not(.completed)::after {
+    content: '•';
+    position: absolute; bottom: 2px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px; color: var(--primary); line-height: 1;
+  }
+  .cal-day.has-workout.today::after { color: white; }
+  .cal-day.has-workout.completed::after { color: white; }
+  .cal-day.future { color: var(--blush); cursor: pointer; }
+  .cal-day.future:hover { background: var(--blush-light); color: var(--primary); }
 
   /* SCREENS */
   .screen { display: none; }
   .screen.active { display: block; }
 
   /* DAY DETAIL */
-  .day-header { background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); padding: 20px 16px 28px; }
-  .back-btn { background: rgba(255,255,255,0.2); border: none; color: white; border-radius: 10px; padding: 8px 14px; cursor: pointer; }
+  .day-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    padding: 20px 16px 28px; position: relative;
+  }
+  .back-btn {
+    background: rgba(255,255,255,0.2); border: none; color: white;
+    border-radius: 10px; padding: 8px 14px; cursor: pointer;
+    font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500;
+    display: flex; align-items: center; gap: 6px; transition: background 0.2s;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.3); }
   .day-date { font-family: 'Playfair Display', serif; font-size: 26px; color: white; margin-top: 12px; }
-  .btn-complete { background: white; color: var(--primary-dark); border: none; border-radius: 12px; padding: 10px 18px; font-weight: 600; cursor: pointer; margin-top: 16px; }
-  .btn-complete.done { background: rgba(255,255,255,0.25); color: white; border: 2px solid rgba(255,255,255,0.5); }
+  .day-date-sub { color: rgba(255,255,255,0.75); font-size: 13px; margin-top: 2px; }
+  .day-actions { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+  .btn-complete {
+    background: white; color: var(--primary-dark); border: none;
+    border-radius: 12px; padding: 10px 18px; font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .btn-complete:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .btn-complete.done {
+    background: rgba(255,255,255,0.25); color: white;
+    border: 2px solid rgba(255,255,255,0.5);
+  }
+  .btn-complete:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-  .exercises-wrap { max-width: 480px; margin: -14px auto 0; padding: 0 16px 100px; }
-  .exercise-card { background: white; border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); position: relative; }
-  .exercise-name { font-weight: 600; display: flex; justify-content: space-between; margin-bottom: 10px; }
-  .exercise-delete { background: none; border: none; color: #ddd; cursor: pointer; }
-  .exercise-pills { display: flex; flex-wrap: wrap; gap: 6px; }
-  .pill { background: var(--blush-light); color: var(--primary-dark); border-radius: 20px; padding: 4px 12px; font-size: 12px; }
-  .feedback-input { width: 100%; border: 1.5px solid var(--blush); border-radius: 10px; padding: 8px; margin-top: 10px; outline: none; }
+  .exercises-wrap {
+    max-width: 480px; margin: -14px auto 0;
+    padding: 0 16px 100px; position: relative; z-index: 5;
+  }
+  .empty-state { text-align: center; padding: 48px 24px; }
+  .empty-state-icon {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, #CDB4FF, #F564A9);
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 300; color: white;
+    margin: 0 auto 16px;
+  }
+  .empty-state-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; color: var(--text); margin-bottom: 8px;
+  }
 
-  /* FAB & MODAL */
-  .fab { position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary), var(--accent)); border: none; border-radius: 50%; color: white; font-size: 28px; cursor: pointer; z-index: 100; }
+  .exercise-card {
+    background: white; border-radius: var(--radius);
+    padding: 16px; margin-bottom: 12px;
+    box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .exercise-card::before {
+    content: ''; position: absolute;
+    left: 0; top: 0; bottom: 0; width: 4px;
+    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    border-radius: 2px 0 0 2px;
+  }
+  .exercise-name {
+    font-size: 16px; font-weight: 600; color: var(--text);
+    margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .exercise-delete {
+    background: none; border: none; color: #ddd;
+    cursor: pointer; font-size: 16px; padding: 0; transition: color 0.2s;
+  }
+  .exercise-delete:hover { color: var(--primary); }
+  .exercise-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .pill {
+    background: var(--blush-light); color: var(--primary-dark);
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 12px; font-weight: 500;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .exercise-note {
+    font-size: 12px; color: var(--text-soft); font-style: italic;
+    margin-bottom: 10px; padding: 8px 12px;
+    background: rgba(205,180,255,0.18); border-radius: 8px;
+  }
+  .feedback-label {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--text-soft); margin-bottom: 6px;
+  }
+  .feedback-input {
+    width: 100%; border: 1.5px solid var(--blush);
+    border-radius: 10px; padding: 8px 12px;
+    font-size: 13px; font-family: 'DM Sans', sans-serif;
+    color: var(--text); background: var(--pale);
+    resize: none; transition: border-color 0.2s; outline: none;
+  }
+  .feedback-input:focus { border-color: var(--primary); }
+  .feedback-input::placeholder { color: #cbb5c4; }
+
+  /* FAB */
+  .fab {
+    position: fixed; bottom: 24px; right: 24px;
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border: none; border-radius: 50%;
+    color: white; font-size: 28px; cursor: pointer;
+    box-shadow: 0 6px 24px rgba(245,100,169,0.4);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .fab:hover { transform: scale(1.08); box-shadow: 0 8px 32px rgba(245,100,169,0.55); }
+  .fab:active { transform: scale(0.95); }
   .fab.hidden { display: none; }
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(4px); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: white; border-radius: 28px 28px 0 0; padding: 24px; width: 100%; max-width: 480px; }
-  .form-input { width: 100%; border: 1.5px solid var(--blush-light); border-radius: 12px; padding: 12px; margin-bottom: 10px; outline: none; }
-  .btn-save { width: 100%; background: var(--primary); color: white; border: none; border-radius: 14px; padding: 16px; font-weight: 600; cursor: pointer; }
 
-  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: var(--dark-text); color: white; padding: 12px 20px; border-radius: 12px; z-index: 3000; transition: 0.3s; }
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(122, 62, 109, 0.35);
+    backdrop-filter: blur(4px);
+    z-index: 200; display: none;
+    align-items: flex-end; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white; border-radius: 28px 28px 0 0;
+    padding: 24px 20px 40px; width: 100%; max-width: 480px;
+    max-height: 90vh; overflow-y: auto;
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .modal-handle {
+    width: 40px; height: 4px; background: var(--blush-light);
+    border-radius: 2px; margin: 0 auto 20px;
+  }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text); margin-bottom: 20px; }
+  .form-group { margin-bottom: 14px; }
+  .form-label {
+    display: block; font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--text-soft); margin-bottom: 6px;
+  }
+  .form-input {
+    width: 100%; border: 1.5px solid var(--blush-light);
+    border-radius: 12px; padding: 12px 14px;
+    font-size: 15px; font-family: 'DM Sans', sans-serif;
+    color: var(--text); background: var(--pale); outline: none; transition: border-color 0.2s;
+  }
+  .form-input:focus { border-color: var(--primary); background: white; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .input-unit-wrap { position: relative; }
+  .input-unit-wrap .form-input { padding-right: 48px; }
+  .input-unit { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 12px; font-weight: 600; color: var(--primary); }
+  .btn-save {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white; border: none; border-radius: 14px;
+    padding: 16px; font-size: 16px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif; cursor: pointer; margin-top: 8px;
+    transition: opacity 0.2s, transform 0.2s;
+    box-shadow: 0 4px 16px rgba(245,100,169,0.35);
+  }
+  .btn-save:hover { opacity: 0.92; transform: translateY(-1px); }
+
+  .toast {
+    position: fixed; top: 20px; left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: var(--text); color: white; border-radius: 12px;
+    padding: 12px 20px; font-size: 14px; font-weight: 500;
+    z-index: 999; transition: transform 0.3s ease; white-space: nowrap;
+  }
   .toast.show { transform: translateX(-50%) translateY(0); }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--blush); border-radius: 2px; }
 </style>
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
 <div id="login-screen" class="login-overlay">
-  <h1 style="font-family:'Playfair Display'; color:var(--text); margin-bottom:20px;">AmazingMaky</h1>
+  <div class="login-logo">Amazing<span>Maky</span></div>
+  <div class="login-sub">Fitness planner</div>
   <button class="btn-login" id="btn-login-google">
-    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
     Přihlásit se přes Google
   </button>
 </div>
 
 <div class="toast" id="toast"></div>
 
+<!-- SCREEN: Calendar -->
 <div class="screen active" id="screen-calendar">
   <div class="header">
     <div class="header-inner">
-      <div class="app-title">Amazing<span>Maky</span></div>
-      <div class="app-subtitle">Fitness planner</div>
+      <div>
+        <div class="app-title">Amazing<span>Maky</span></div>
+        <div class="app-subtitle">Fitness planner</div>
+      </div>
+      <button class="btn-logout" id="btn-logout">Odhlásit</button>
     </div>
   </div>
 
@@ -150,8 +418,9 @@
     <div class="stats-inner">
       <div class="stats-icon">★</div>
       <div>
-        <div style="font-size:12px; color:var(--text-soft)">Odcvičené tréninky</div>
+        <div class="stats-label">Odcvičené tréninky</div>
         <div class="stats-value" id="completed-count">0</div>
+        <div class="stats-sub">celkem splněných dní</div>
       </div>
     </div>
   </div>
@@ -159,48 +428,88 @@
   <div class="calendar-wrap">
     <div class="calendar-card">
       <div class="cal-nav">
-        <button class="cal-nav-btn" id="prev-month">←</button>
+        <button class="cal-nav-btn" id="prev-month">&#8592;</button>
         <div class="cal-month" id="cal-month-label"></div>
-        <button class="cal-nav-btn" id="next-month">→</button>
+        <button class="cal-nav-btn" id="next-month">&#8594;</button>
       </div>
       <div class="cal-weekdays">
-        <div class="cal-weekday">Po</div><div class="cal-weekday">Út</div><div class="cal-weekday">St</div><div class="cal-weekday">Čt</div><div class="cal-weekday">Pá</div><div class="cal-weekday">So</div><div class="cal-weekday">Ne</div>
+        <div class="cal-weekday">Po</div>
+        <div class="cal-weekday">Út</div>
+        <div class="cal-weekday">St</div>
+        <div class="cal-weekday">Čt</div>
+        <div class="cal-weekday">Pá</div>
+        <div class="cal-weekday">So</div>
+        <div class="cal-weekday">Ne</div>
       </div>
       <div class="cal-days" id="cal-days"></div>
     </div>
   </div>
 </div>
 
+<!-- SCREEN: Day Detail -->
 <div class="screen" id="screen-day">
   <div class="day-header">
-    <button class="back-btn" id="back-btn">← Kalendář</button>
+    <button class="back-btn" id="back-btn">&#8592; Kalendář</button>
     <div class="day-date" id="day-date-title"></div>
     <div class="day-date-sub" id="day-date-sub"></div>
-    <button class="btn-complete" id="btn-complete">🎯 Označit jako splněný</button>
+    <div class="day-actions">
+      <button class="btn-complete" id="btn-complete">🎯 Označit jako splněný</button>
+    </div>
   </div>
+
   <div class="exercises-wrap" id="exercises-wrap"></div>
 </div>
 
+<!-- MODAL: Add Exercise -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
-    <div class="app-subtitle" style="color:var(--text); margin-bottom:10px;">PŘIDAT CVIK</div>
-    <input class="form-input" type="text" id="f-name" placeholder="Název cviku *">
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-      <input class="form-input" type="number" id="f-sets" placeholder="Série">
-      <input class="form-input" type="number" id="f-reps" placeholder="Opakování">
+    <div class="modal-handle"></div>
+    <div class="modal-title">➕ Přidat cvik</div>
+    <div class="form-group">
+      <label class="form-label">Název cviku *</label>
+      <input class="form-input" type="text" id="f-name" placeholder="např. Bench press" list="exercise-suggestions" autocomplete="off">
+      <datalist id="exercise-suggestions"></datalist>
     </div>
-    <input class="form-input" type="number" id="f-weight" placeholder="Váha (kg)">
-    <input class="form-input" type="text" id="f-note" placeholder="Poznámka">
-    <button class="btn-save" id="btn-save-exercise">Uložit do cloudu</button>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Série *</label>
+        <input class="form-input" type="number" id="f-sets" placeholder="4" min="1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Opakování *</label>
+        <input class="form-input" type="number" id="f-reps" placeholder="10" min="1">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Pauza</label>
+        <div class="input-unit-wrap">
+          <input class="form-input" type="text" id="f-rest" placeholder="60">
+          <span class="input-unit">s</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Váha</label>
+        <div class="input-unit-wrap">
+          <input class="form-input" type="number" id="f-weight" placeholder="50" min="0">
+          <span class="input-unit">kg</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Poznámka (nepovinné)</label>
+      <input class="form-input" type="text" id="f-note" placeholder="např. pomalá excentrická fáze">
+    </div>
+    <button class="btn-save" id="btn-save-exercise">Uložit cvik</button>
   </div>
 </div>
 
-<button class="fab hidden" id="fab">+</button>
+<button class="fab hidden" id="fab" title="Přidat cvik">+</button>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getAuth, signInWithPopup, signOut, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDA5fywHFPg81FfjIiQNwnotQl_racWrRE",
@@ -215,8 +524,6 @@
   const db = getFirestore(app);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
-
-  // Reference odpovídající tvým Rules: kolekce 'state', dokument 'spolecny_kalendar'
   const docRef = doc(db, "state", "spolecny_kalendar");
 
   let localDataState = {};
@@ -226,15 +533,20 @@
   let selectedDateKey = null;
   let unsubscribe = null;
 
+  const monthNames = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
+  const dayNames = ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
+
   // --- AUTH ---
   document.getElementById('btn-login-google').onclick = () => signInWithPopup(auth, provider);
+  document.getElementById('btn-logout').onclick = () => signOut(auth);
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('login-screen').classList.add('hidden');
       startSync();
     } else {
-      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('login-screen').classList.remove('hidden');
+      if (unsubscribe) { unsubscribe(); unsubscribe = null; }
     }
   });
 
@@ -250,7 +562,6 @@
     });
   }
 
-  // --- DATA LOGIC ---
   async function saveData(data) {
     try {
       await setDoc(docRef, data);
@@ -259,6 +570,20 @@
     }
   }
 
+  // --- UTILS ---
+  function todayKey() {
+    const t = new Date();
+    return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+  }
+  function dateKey(y, m, d) {
+    return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  }
+  function isFuture(key) { return key > todayKey(); }
+  function esc(str) {
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // --- CALENDAR ---
   function renderCalendar() {
     const data = localDataState;
     const today = todayKey();
@@ -272,8 +597,11 @@
     let startDow = (first.getDay() + 6) % 7;
     const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
 
-    for (let i = 0; i < startDow; i++) daysEl.appendChild(Object.assign(document.createElement('div'), {className:'cal-day empty'}));
-    
+    for (let i = 0; i < startDow; i++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day empty';
+      daysEl.appendChild(el);
+    }
     for (let d = 1; d <= daysInMonth; d++) {
       const key = dateKey(viewYear, viewMonth, d);
       const dayData = data[key];
@@ -281,100 +609,192 @@
       el.className = 'cal-day';
       el.textContent = d;
       if (key === today) el.classList.add('today');
+      if (isFuture(key)) el.classList.add('future');
       if (dayData?.completed) el.classList.add('completed');
       if (dayData?.exercises?.length) el.classList.add('has-workout');
-      el.onclick = () => openDay(key);
+      el.addEventListener('click', () => openDay(key));
       daysEl.appendChild(el);
     }
   }
 
-  function renderDayDetail() {
-    const day = localDataState[selectedDateKey] || { exercises: [] };
-    const btn = document.getElementById('btn-complete');
-    btn.textContent = day.completed ? 'Splněno ✓' : '🎯 Označit jako splněný';
-    btn.className = day.completed ? 'btn-complete done' : 'btn-complete';
-    btn.onclick = toggleComplete;
+  document.getElementById('prev-month').addEventListener('click', () => {
+    viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+    renderCalendar();
+  });
+  document.getElementById('next-month').addEventListener('click', () => {
+    viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    renderCalendar();
+  });
 
-    const wrap = document.getElementById('exercises-wrap');
-    wrap.innerHTML = day.exercises.length ? day.exercises.map((ex, i) => `
-      <div class="exercise-card">
-        <div class="exercise-name">${esc(ex.name)} <button onclick="deleteExercise(${i})">✕</button></div>
-        <div class="exercise-pills">
-          <div class="pill">💪 ${ex.sets}x${ex.reps}</div>
-          ${ex.weight ? `<div class="pill">⚖️ ${ex.weight}kg</div>` : ''}
-        </div>
-        <textarea class="feedback-input" placeholder="Tvoje pocity..." onchange="saveFeedback(${i}, this.value)">${esc(ex.feedback||'')}</textarea>
-      </div>
-    `).join('') : '<div class="empty-state">Žádné cviky</div>';
-  }
-
-  // --- ACTIONS ---
-  window.deleteExercise = (idx) => {
-    const data = {...localDataState};
-    data[selectedDateKey].exercises.splice(idx, 1);
-    saveData(data);
-  };
-
-  window.saveFeedback = (idx, val) => {
-    const data = {...localDataState};
-    data[selectedDateKey].exercises[idx].feedback = val;
-    saveData(data);
-  };
-
-  function toggleComplete() {
-    const data = {...localDataState};
-    if (!data[selectedDateKey]) data[selectedDateKey] = { exercises: [] };
-    data[selectedDateKey].completed = !data[selectedDateKey].completed;
-    saveData(data);
-  }
-
-  document.getElementById('btn-save-exercise').onclick = () => {
-    const name = document.getElementById('f-name').value;
-    if (!name) return showToast("Zadej název");
-    const data = {...localDataState};
-    if (!data[selectedDateKey]) data[selectedDateKey] = { exercises: [], completed: false };
-    data[selectedDateKey].exercises.push({
-      name, 
-      sets: document.getElementById('f-sets').value || 0,
-      reps: document.getElementById('f-reps').value || 0,
-      weight: document.getElementById('f-weight').value || 0,
-      note: document.getElementById('f-note').value,
-      feedback: ''
-    });
-    saveData(data);
-    document.getElementById('modal-overlay').classList.remove('open');
-  };
-
-  // --- UI & UTILS ---
-  const monthNames = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
-  function todayKey() { const t = new Date(); return dateKey(t.getFullYear(), t.getMonth(), t.getDate()); }
-  function dateKey(y, m, d) { return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
-  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
-  
+  // --- DAY DETAIL ---
   function openDay(key) {
     selectedDateKey = key;
-    document.getElementById('day-date-title').textContent = key;
+    const [y,m,d] = key.split('-').map(Number);
+    const dateObj = new Date(y, m-1, d);
+    document.getElementById('day-date-title').textContent =
+      `${dayNames[dateObj.getDay()]} ${d}. ${monthNames[m-1]} ${y}`;
+    document.getElementById('day-date-sub').textContent =
+      key === todayKey() ? 'Dnes' : isFuture(key) ? 'Plánovaný den' : 'Minulý den';
     renderDayDetail();
     showScreen('day');
   }
 
-  function showScreen(s) {
-    document.getElementById('screen-calendar').classList.toggle('active', s==='calendar');
-    document.getElementById('screen-day').classList.toggle('active', s==='day');
-    document.getElementById('fab').classList.toggle('hidden', s!=='day');
-    currentView = s;
+  function renderDayDetail() {
+    const day = localDataState[selectedDateKey] || { completed: false, exercises: [] };
+    const future = isFuture(selectedDateKey);
+
+    const btn = document.getElementById('btn-complete');
+    if (day.completed) {
+      btn.textContent = 'Splněno ✓';
+      btn.classList.add('done');
+      btn.disabled = false;
+      btn.onclick = () => toggleComplete();
+    } else if (future) {
+      btn.textContent = 'Nelze označit jako splněný';
+      btn.classList.remove('done');
+      btn.disabled = true;
+    } else {
+      btn.textContent = '🎯 Označit jako splněný';
+      btn.classList.remove('done');
+      btn.disabled = false;
+      btn.onclick = () => toggleComplete();
+    }
+
+    const wrap = document.getElementById('exercises-wrap');
+    if (!day.exercises || day.exercises.length === 0) {
+      wrap.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">+</div>
+          <div class="empty-state-title">Zatím žádné cviky</div>
+        </div>`;
+    } else {
+      wrap.innerHTML = day.exercises.map((ex, i) => `
+        <div class="exercise-card">
+          <div class="exercise-name">
+            ${esc(ex.name)}
+            <button class="exercise-delete" onclick="deleteExercise(${i})" title="Smazat">✕</button>
+          </div>
+          <div class="exercise-pills">
+            <div class="pill">💪 ${ex.sets} sérií</div>
+            <div class="pill">🔄 ${ex.reps} opakování</div>
+            ${ex.rest ? `<div class="pill">⏱ ${esc(ex.rest)} s pauza</div>` : ''}
+            ${ex.weight ? `<div class="pill">⚖️ ${ex.weight} kg</div>` : ''}
+          </div>
+          ${ex.note ? `<div class="exercise-note">${esc(ex.note)}</div>` : ''}
+          <div class="feedback-label">Zpětná vazba</div>
+          <textarea class="feedback-input" rows="2" placeholder="Jak to šlo? Uprav váhu, zapiš pocity..." onchange="saveFeedback(${i}, this.value)">${esc(ex.feedback||'')}</textarea>
+        </div>
+      `).join('');
+    }
   }
 
-  document.getElementById('back-btn').onclick = () => showScreen('calendar');
-  document.getElementById('fab').onclick = () => document.getElementById('modal-overlay').classList.add('open');
-  document.getElementById('modal-overlay').onclick = (e) => { if(e.target.id==='modal-overlay') e.target.classList.remove('open'); };
-  document.getElementById('prev-month').onclick = () => { viewMonth--; if(viewMonth<0){viewMonth=11;viewYear--;} renderCalendar(); };
-  document.getElementById('next-month').onclick = () => { viewMonth++; if(viewMonth>11){viewMonth=0;viewYear++;} renderCalendar(); };
-
-  function showToast(m) {
-    const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+  function toggleComplete() {
+    const data = {...localDataState};
+    if (!data[selectedDateKey]) data[selectedDateKey] = { completed: false, exercises: [] };
+    data[selectedDateKey].completed = !data[selectedDateKey].completed;
+    saveData(data);
+    showToast(data[selectedDateKey].completed ? 'Trénink splněn! Skvělá práce! 🎉' : 'Označení zrušeno');
   }
+
+  window.deleteExercise = (idx) => {
+    const data = {...localDataState};
+    if (!data[selectedDateKey]) return;
+    data[selectedDateKey].exercises.splice(idx, 1);
+    saveData(data);
+    showToast('Cvik odstraněn');
+  };
+
+  window.saveFeedback = (idx, val) => {
+    const data = {...localDataState};
+    if (!data[selectedDateKey]?.exercises[idx]) return;
+    data[selectedDateKey].exercises[idx].feedback = val;
+    saveData(data);
+  };
+
+  // --- EXERCISE HISTORY (localStorage for autocomplete) ---
+  function loadExerciseHistory() {
+    try { return JSON.parse(localStorage.getItem('glowfit_exercises') || '[]'); } catch { return []; }
+  }
+  function saveExerciseToHistory(name) {
+    const history = loadExerciseHistory();
+    if (!history.includes(name)) {
+      history.push(name);
+      localStorage.setItem('glowfit_exercises', JSON.stringify(history));
+    }
+  }
+  function populateDatalist() {
+    const dl = document.getElementById('exercise-suggestions');
+    dl.innerHTML = '';
+    loadExerciseHistory().forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      dl.appendChild(opt);
+    });
+  }
+
+  // --- MODAL / FAB ---
+  document.getElementById('fab').addEventListener('click', () => {
+    clearForm();
+    populateDatalist();
+    document.getElementById('modal-overlay').classList.add('open');
+  });
+  document.getElementById('modal-overlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal-overlay'))
+      document.getElementById('modal-overlay').classList.remove('open');
+  });
+
+  document.getElementById('btn-save-exercise').addEventListener('click', () => {
+    const name = document.getElementById('f-name').value.trim();
+    const sets = document.getElementById('f-sets').value;
+    const reps = document.getElementById('f-reps').value;
+    if (!name || !sets || !reps) { showToast('Vyplň název, série a opakování'); return; }
+    saveExerciseToHistory(name);
+    const ex = {
+      name, sets, reps,
+      rest: document.getElementById('f-rest').value.trim(),
+      weight: document.getElementById('f-weight').value,
+      note: document.getElementById('f-note').value.trim(),
+      feedback: ''
+    };
+    const data = {...localDataState};
+    if (!data[selectedDateKey]) data[selectedDateKey] = { completed: false, exercises: [] };
+    data[selectedDateKey].exercises.push(ex);
+    saveData(data);
+    document.getElementById('modal-overlay').classList.remove('open');
+    showToast('Cvik přidán ✓');
+  });
+
+  function clearForm() {
+    ['f-name','f-sets','f-reps','f-rest','f-weight','f-note'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+  }
+
+  // --- NAVIGATION ---
+  document.getElementById('back-btn').addEventListener('click', () => {
+    showScreen('calendar');
+    renderCalendar();
+  });
+
+  function showScreen(name) {
+    document.getElementById('screen-calendar').classList.toggle('active', name === 'calendar');
+    document.getElementById('screen-day').classList.toggle('active', name === 'day');
+    document.getElementById('fab').classList.toggle('hidden', name !== 'day');
+    currentView = name;
+  }
+
+  // --- TOAST ---
+  let toastTimeout;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // Init calendar render (will re-render once Firebase data arrives)
+  renderCalendar();
 </script>
 </body>
 </html>
